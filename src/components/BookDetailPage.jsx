@@ -47,7 +47,10 @@ const BookDetailPage = () => {
   const handleQuantityChange = (event) => {
     setQuantity(parseInt(event.target.value));
   };
-
+  const handleCancelComment = ()=>{
+    setComment("");
+    setStar(0);
+  }
   const handleAddToCart = () => {
     // Thực hiện thêm sách vào giỏ hàng với số lượng đã chọn
     // Ví dụ:
@@ -118,7 +121,7 @@ const BookDetailPage = () => {
               <input
                 style={{
                   padding: "3px 0px 7px 10px",
-                  marginTop:"2px"
+                  marginTop: "2px",
                 }}
                 type="number"
                 id="quantity"
@@ -143,6 +146,30 @@ const BookDetailPage = () => {
           <h3 className="">Đánh giá sản phẩm</h3>
           <dt className="mt-2">Đánh giá:</dt>
           <dt>Nhận xét</dt>
+          <div className="mb-2 mt-3">
+            <textarea
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              cols={200}
+              rows="3"
+              placeholder="Viết đánh giá"
+              className="ps-2 w-100"
+            ></textarea>
+          </div>
+          <div className="d-flex mb-3 float-end">
+            <button
+              onClick={handleCancelComment}
+              className="me-4 border rounded-3 px-2 py-1 btn btn-danger"
+            >
+              Hủy
+            </button>
+            <button
+              // onClick={handleComment}
+              className="border rounded-3 px-2 py-1 btn btn-success"
+            >
+              Đánh giá
+            </button>
+          </div>
         </div>
         <div className="d-flex justify-content-end bottom-0 end-0 me-5 mb-5">
           {checkRole(userRoles) && (
