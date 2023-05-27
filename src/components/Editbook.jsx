@@ -7,6 +7,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const EditBookForm = () => {
   // const history = useHistory();
+  const token = localStorage.getItem("token");
+  console.log(token);
   const [update, setUpdate] = useState(false);
   const navigate = useNavigate();
   const { bookId } = useParams();
@@ -60,6 +62,7 @@ const EditBookForm = () => {
     axios
       .put(`http://localhost:8082/api/book/editBook/${bookId}`, formData, {
         headers: {
+          "Authorization": `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
       })
@@ -180,18 +183,20 @@ const EditBookForm = () => {
           onChange={handleImageChange}
         />
       </div>
-      <div className="row col-md-4">
+      <div className="col col-md-2">
         {image ? (
           <img
             className="card-img-top"
             src={URL.createObjectURL(image)}
             alt="images"
+            
           />
         ) : (
           <img
             src={`http://localhost:8082/${book.bookImage}`}
             alt="images"
             className="card-img-top"
+            
           />
         )}
         <button type="submit" className="btn btn-primary">

@@ -1,29 +1,48 @@
-
-import './App.css';
-import { BrowserRouter,Routes,Route } from "react-router-dom";
+import "./App.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Register from "./components/Register";
-import Login from "./components/Login";
- 
+import Login from "./components/Login/Login";
+
 import Home from "./components/Home";
-import BookDetailPage from './components/BookDetailPage';
-import Logic from './components/LogicA/Logic';
-import EditBook from './components/Editbook';
-import ContactSection from './components/contact';
+import BookDetailPage from "./components/BookDetailPage";
+import Logic from "./components/LogicA/Logic";
+import EditBook from "./components/Editbook";
+import ContactSection from "./components/LogicA/DFS/contact";
+import { useState } from "react";
+import NotFound from "./components/ErrorPage/errorpage";
+import AddBook from "./components/AddBook";
 
 function App() {
+  const token = localStorage.getItem("token");
+  const rolesString = localStorage.getItem("roles");
+  const userRoles = rolesString ? JSON.parse(rolesString) : [];
+  // const WrappedHome = RequireLogin(Home);
+  const [render, setRender] = useState(false)
+
+  const checkRole = (userRoles)=>{
+    if( userRoles.includes("ADMIN")){
+      return true
+    }
+    return false
+  }
+
   return (
     <div>
       <BrowserRouter>
-            <Routes>
-              <Route path="/home" element= { <Home/>} />
-              <Route path="/register" element= { <Register/>} />
-              <Route path="/" element= { <Login/>} />
-              <Route path="/books/:bookId" element={<BookDetailPage />} />
-              <Route path="/logic" element={<Logic/>}></Route>
-              <Route path="/contact" element={<ContactSection/>}></Route>
-              <Route path="/books/edit/:bookId" element={<EditBook/>}></Route>
-            </Routes>
-        </BrowserRouter>
+        <Routes>
+          
+          <Route path="/register" element={<Register />} />
+          <Route path="/" element={ token ? <Home /> : <Login setRender={setRender} render={render} />} />
+          <Route path="/books/:bookId" element={token ?<BookDetailPage />: <Login setRender={setRender} render={render} />} />
+          <Route path="/logic" element={<Logic />}></Route>
+          <Route path="/contact" element={<ContactSection />} />
+          <Route path="/addbook" element={<AddBook/>} />
+          <Route
+            path="/books/edit/:bookId"
+            element={ checkRole(userRoles) ? <EditBook /> :<NotFound/>}
+          ></Route>
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }

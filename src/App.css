@@ -6,7 +6,20 @@
   height: 40vmin;
   pointer-events: none;
 }
-
+.red-line {
+  border-bottom: 2px solid red;
+}
+.header-link {
+  font-weight: bold;
+  color: rgb(30, 191, 12);
+}
+.fixed-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+}
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;

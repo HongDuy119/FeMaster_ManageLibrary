@@ -2,27 +2,40 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Header from "./Header";
+
 // import { Base64 } from "js-base64";
 
 // import { BrowserRouter, Link } from 'react-router-dom';
 
 const Home = () => {
   // const [title, setTitle] = useState("");
+  const rolesString = localStorage.getItem("roles");
+  const userRoles = rolesString ? JSON.parse(rolesString) : [];
+  const checkRole = (userRoles) => {
+    if (userRoles.includes("ADMIN")) {
+      return true;
+    }
+    return false;
+  };
+  const token = localStorage.getItem("token");
   const [books, setBooks] = useState([]);
-  const [searchOption, setSearchOption] = useState('title');
+  const [searchOption, setSearchOption] = useState("title");
   const handleSearchOptionChange = (event) => {
     setSearchOption(event.target.value);
   };
   useEffect(() => {
-    axios.get(`http://localhost:8082/api/book/getAll`).then((response) => {
-      setBooks(response.data);
-    });
+    axios
+      .get(`http://localhost:8082/api/book/getAll`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        setBooks(response.data);
+      });
   }, []);
-  // console.log(searchOption);
   const onchange = (event) => {
-    // setTitle(event.target.value);
-    // setTitle(title.trim())
-    // console.log(title);
     if (event.target.value !== "") {
       axios
         .get(
@@ -42,9 +55,15 @@ const Home = () => {
   return (
     <div>
       <Header></Header>
-      <div className="d-flex mt-5">
-        <h3 class="mr-5">Tìm kiếm sách: </h3>
-        <select name="search" id="search" className="ms-2" value={searchOption} onChange={handleSearchOptionChange}>
+      <div className="d-flex mt-3 ms-5">
+        <dt style={{fontSize:"1.75rem"}} class="mr-5">Tìm kiếm sách: </dt>
+        <select
+          name="search"
+          id="search"
+          className="ms-2 border border-dark rounded"
+          value={searchOption}
+          onChange={handleSearchOptionChange}
+        >
           <option value="title">Title</option>
           <option value="content">Content</option>
           <option value="author">Author</option>
@@ -60,7 +79,7 @@ const Home = () => {
         />
       </div>
 
-      <div className="container my-5">
+      <div className="container ">
         <h2 className="text-center mb-4">Our Bestselling Books</h2>
         <div className="row row-cols-1 row-cols-md-4 g-4">
           {books.map((book) => (
@@ -69,8 +88,9 @@ const Home = () => {
                 <img
                   src={`http://localhost:8082/${book.bookImage}`}
                   className="card-img-top img-fluid"
-                  style={{height: '250px'}}
+                  style={{ height: "250px",objectFit:"fill"}}
                   alt={book.bookTitle}
+                  class = "bg-image hover-zoom"
                 />
                 <div className="card-body">
                   <h5 className="card-title">{book.bookTitle}</h5>
@@ -92,6 +112,11 @@ const Home = () => {
           ))}
         </div>
       </div>
+      {checkRole(userRoles) && (
+        <Link to="/addbook" className="btn btn-primary">
+          Add Book
+        </Link>
+      )}
     </div>
   );
 };
