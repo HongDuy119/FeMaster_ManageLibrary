@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "./App.css";
 import Header from "./Header";
+import ItemComment from "./ItemComment";
 import { Button } from "reactstrap";
 import Rating from "@mui/material/Rating";
 
@@ -21,11 +22,11 @@ const BookDetailPage = () => {
 
   const [book, setBook] = useState({});
   const [comment, setComment] = useState("");
-  const [quantity, setQuantity] = useState(1);
+  const [comments,setComments] = useState([]);
   const { bookId } = useParams();
   const navigate = useNavigate();
 
-  useEffect(() => {
+  useEffect(async () => {
     axios
       .get(`http://localhost:8082/api/book/${bookId}`, {
         headers: {
@@ -39,20 +40,17 @@ const BookDetailPage = () => {
       .catch((error) => {
         console.log(error);
       });
+   const res = await axios.get(`http://localhost:8082/api/comment/get/${bookId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    setComments(res.data);
+    console.log(res.data);
   }, [bookId]);
   const handleCancelComment = () => {
     setComment("");
     setStar(0);
-  };
-  const handleAddToCart = () => {
-    // Thực hiện thêm sách vào giỏ hàng với số lượng đã chọn
-    // Ví dụ:
-    const cartItem = {
-      bookId: book.bookId,
-      quantity: quantity,
-    };
-    // Tiếp theo, bạn có thể gửi cartItem lên server hoặc lưu vào localStorage
-    console.log(cartItem);
   };
 
   const handleDelete = () => {
@@ -85,7 +83,7 @@ const BookDetailPage = () => {
         },
       }
     );
-    console.log(response.data);
+    console.log(comments);
     setComment("");
     setStar("");
   };
@@ -191,6 +189,11 @@ const BookDetailPage = () => {
             </button>
           </div>
         </div>
+        {
+                comments.map((item, index)=>(
+                    <ItemComment key={index} item={item} />
+                ))
+            }
         <div className="d-flex justify-content-end bottom-0 end-0 me-5 mb-5">
           {checkRole(userRoles) && (
             <Link
