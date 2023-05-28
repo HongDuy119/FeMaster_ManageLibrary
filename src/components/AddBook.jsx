@@ -10,6 +10,7 @@ const AddBook = () => {
   const [bookDescription, setBookDescription] = useState("");
   const [bookCategory, setBookCategory] = useState("");
   const [bookNumberPage, setBookNumberPage] = useState("");
+  const [price, setPrice] = useState("");
   const [image, setImage] = useState(null);
 
   const handleTitleChange = (e) => {
@@ -34,6 +35,9 @@ const AddBook = () => {
 
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
+  };
+  const handlePriceChange = (e) => {
+    setImage(e.target.value);
   };
 
   const handleSubmit = (e) => {
@@ -81,84 +85,109 @@ const AddBook = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="row">
-        <div className="col-md-6">
-          <div className="form-group">
-            <label htmlFor="bookTitle">Title</label>
-            <input
-              type="text"
+      <dt className="d-flex justify-content-center mb-5" style={{fontSize:"25px"}}>Chào mừng bạn đến với trang thêm sách</dt>
+      <div className="row m-3 container">
+        <div className="col-md-8">
+          <div className="row">
+            <div className="form-group col-md-6">
+              <dt htmlFor="bookTitle">Title</dt>
+              <input
+                type="text"
+                className="form-control"
+                id="bookTitle"
+                required
+                onChange={handleTitleChange}
+              />
+            </div>
+            <div className="form-group col-md-6">
+              <dt htmlFor="bookAuthor">Author</dt>
+              <input
+                type="text"
+                className="form-control"
+                id="bookAuthor"
+                onChange={handleAuthorChange}
+              />
+            </div>
+          </div>
+          <div className="form-group mt-2">
+            <dt htmlFor="bookDescription">Description</dt>
+            <textarea
+              style={{
+                height: "150px",
+              }}
               className="form-control"
-              id="bookTitle"
-              value={bookTitle}
-              onChange={handleTitleChange}
+              id="bookDescription"
+              onChange={handleDescriptionChange}
             />
           </div>
-        </div>
-        <div className="col-md-6">
-          <div className="form-group">
-            <label htmlFor="bookAuthor">Author</label>
-            <input
-              type="text"
-              className="form-control"
-              id="bookAuthor"
-              value={bookAuthor}
-              onChange={handleAuthorChange}
-            />
+          <div className="row mt-2">
+            <div className="form-group col-md-6">
+              <dt htmlFor="date">Date</dt>
+              <input
+                type="text"
+                className="form-control"
+                id="date"
+                // {...register("date")}
+              />
+            </div>
+            <div className="form-group col-md-6">
+              <dt htmlFor="bookNumberPage">Number of Pages</dt>
+              <input
+                type="text"
+                className="form-control"
+                id="bookNumberPage"
+                onChange={handleNumberPageChange}
+              />
+            </div>
+          </div>
+          <div className="row mt-2">
+            <div className="form-group col-md-6">
+              <dt htmlFor="bookCategory">Category</dt>
+              <input
+                type="text"
+                className="form-control"
+                id="bookCategory"
+                onChange={handleCategoryChange}
+              />
+            </div>
+            <div className="form-group col-md-6">
+              <dt htmlFor="bookAuthor">Price</dt>
+              <input
+                type="text"
+                className="form-control"
+                id="price"
+                required
+                onChange={handlePriceChange}
+              />
+            </div>
           </div>
         </div>
-      </div>
-      <div className="form-group">
-        <label htmlFor="bookDescription">Description</label>
-        <textarea
-          className="form-control"
-          id="bookDescription"
-          value={bookDescription}
-          onChange={handleDescriptionChange}
-        />
-      </div>
-      <div className="row">
-        <div className="col-md-6">
+        <div className="col-md-4">
           <div className="form-group">
-            <label htmlFor="bookCategory">Category</label>
+            <dt htmlFor="image">Image</dt>
             <input
-              type="text"
-              className="form-control"
-              id="bookCategory"
-              value={bookCategory}
-              onChange={handleCategoryChange}
+              type="file"
+              className="form-control-file mt-2"
+              id="image"
+              name="Upload"
+              accept="image/*"
+              onChange={handleImageChange}
             />
           </div>
-        </div>
-        <div className="col-md-6">
-          <div className="form-group">
-            <label htmlFor="bookNumberPage">Number of Pages</label>
-            <input
-              type="text"
-              className="form-control"
-              id="bookNumberPage"
-              value={bookNumberPage}
-              onChange={handleNumberPageChange}
-            />
+          <div className="row mt-2">
+            <div className="col-md-3">
+              {image && (
+                <img
+                  className="card-img-top img1"
+                  src={URL.createObjectURL(image)}
+                  alt="images"
+                />
+              )}
+            </div>
           </div>
         </div>
-      </div>
-      <div className="form-group">
-        <label htmlFor="image">Image</label>
-        <input
-          type="file"
-          className="form-control-file"
-          id="image"
-          onChange={handleImageChange}
-        />
       </div>
       <div className="col col-md-2">
-        {image && (
-          <img
-            className="card-img-top"
-            src={URL.createObjectURL(image)}
-            alt="images"
-          />
-        )}
         <button type="submit" className="btn btn-primary">
           Save Changes
         </button>

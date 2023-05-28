@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import "./App.css";
 import Header from "./Header";
 import { Button } from "reactstrap";
+import Rating from "@mui/material/Rating";
 
 const BookDetailPage = () => {
   const token = localStorage.getItem("token");
@@ -16,7 +17,7 @@ const BookDetailPage = () => {
     }
     return false;
   };
-  const [strar, setStar] = useState(0);
+  const [star, setStar] = useState(0);
 
   const [book, setBook] = useState({});
   const [comment, setComment] = useState("");
@@ -39,18 +40,10 @@ const BookDetailPage = () => {
         console.log(error);
       });
   }, [bookId]);
-
-  const handleCommentChange = (event) => {
-    setComment(event.target.value);
-  };
-
-  const handleQuantityChange = (event) => {
-    setQuantity(parseInt(event.target.value));
-  };
-  const handleCancelComment = ()=>{
+  const handleCancelComment = () => {
     setComment("");
     setStar(0);
-  }
+  };
   const handleAddToCart = () => {
     // Thực hiện thêm sách vào giỏ hàng với số lượng đã chọn
     // Ví dụ:
@@ -78,6 +71,23 @@ const BookDetailPage = () => {
           console.log(error);
         });
     }
+  };
+  const handleComment = () => {
+    const response = axios.post(
+      `http://localhost:8082/api/comment/add/${bookId}`,
+      {
+        comment: comment,
+        star: star,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+      }
+    );
+    console.log(response.data);
+    setComment("");
+    setStar("");
   };
 
   return (
@@ -144,8 +154,18 @@ const BookDetailPage = () => {
         </div>
         <div className="">
           <h3 className="">Đánh giá sản phẩm</h3>
-          <dt className="mt-2">Đánh giá:</dt>
-          <dt>Nhận xét</dt>
+          <div className="d-flex mt-2">
+            <dt className="me-2">Đánh giá:</dt>
+            <Rating
+              name="simple-controlled"
+              size="large"
+              value={star}
+              onChange={(event, newValue) => {
+                setStar(newValue);
+              }}
+            />
+          </div>
+          <dt>Nhận xét:</dt>
           <div className="mb-2 mt-3">
             <textarea
               value={comment}
@@ -164,7 +184,7 @@ const BookDetailPage = () => {
               Hủy
             </button>
             <button
-              // onClick={handleComment}
+              onClick={handleComment}
               className="border rounded-3 px-2 py-1 btn btn-success"
             >
               Đánh giá
