@@ -9,14 +9,6 @@ import Header from "./Header";
 
 const Home = () => {
   // const [title, setTitle] = useState("");
-  const rolesString = localStorage.getItem("roles");
-  const userRoles = rolesString ? JSON.parse(rolesString) : [];
-  const checkRole = (userRoles) => {
-    if (userRoles.includes("ADMIN")) {
-      return true;
-    }
-    return false;
-  };
   const token = localStorage.getItem("token");
   const [books, setBooks] = useState([]);
   const [searchOption, setSearchOption] = useState("title");
@@ -112,11 +104,6 @@ const Home = () => {
           ))}
         </div>
       </div>
-      {checkRole(userRoles) && (
-        <Link to="/addbook" className="btn btn-primary">
-          Add Book
-        </Link>
-      )}
     </div>
   );
 };

@@ -4,6 +4,15 @@ import {CgProfile} from "react-icons/cg"
 import { useEffect, useState } from "react";
 
 const Header = () => {
+  // const token = localStorage.getItem("token");
+  const rolesString = localStorage.getItem("roles");
+  const userRoles = rolesString ? JSON.parse(rolesString) : []; 
+  const checkRole = (userRoles)=>{
+    if( userRoles.includes("ADMIN")){
+      return true
+    }
+    return false
+  }
   const [showOptions, setShowOptions] = useState(false);
 
   const handleProfileClick = () => {
@@ -49,7 +58,7 @@ const Header = () => {
             alt="Logo"
             className="logo-image me-3"
           />
-          My Website
+          {!checkRole(userRoles)?"My Website":"Hệ thống quản lý thư viện"}
         </Link>
         <button
           className="navbar-toggler"
@@ -66,25 +75,31 @@ const Header = () => {
           <ul className="navbar-nav">
             <li className="nav-item">
               <Link className="nav-link" to="/">
-                Home
+                <button style={{height:"35px"}} className="text-dark btn btn-outline-info rounded border border-light">Home</button>
               </Link>
             </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/logic">
-                Logic
+            {
+              checkRole(userRoles) &&
+              (<li className="nav-item">
+              <Link className="nav-link" to="/AdminBook">
+                <button  style={{height:"35px"}} className="text-dark btn btn-outline-info rounded border border-light">Quản lý sách</button>
               </Link>
-            </li>
-            <li className="nav-item">
+            </li>)
+            }
+            {
+              checkRole(userRoles)&&
+              (<li className="nav-item">
               <Link className="nav-link" to="/contact">
-                Contact
+              <button style={{height:"35px"}} className="text-dark btn btn-outline-info rounded border border-light">Quản đơn hàng</button>
               </Link>
-            </li>
+            </li>)
+            }
           </ul>
         </div>
         <div className="ml-auto">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <Link className="nav-link" to="/profile">
+              <Link className="nav-link" to="/cart">
                 {/* <i className="bi bi-person-circle"></i> Cart */}
                 <dt style={{
                   fontSize:"1.1rem"

@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "./App.css";
-const EditBookForm = () => {
+import "../../App.css";
+const EditBook = () => {
   // const history = useHistory();
   const token = localStorage.getItem("token");
   const [update, setUpdate] = useState(false);
@@ -243,4 +243,4 @@ const EditBookForm = () => {
   );
 };
 
-export default EditBookForm;
+export default EditBook;

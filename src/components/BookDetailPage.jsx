@@ -7,8 +7,20 @@ import Header from "./Header";
 import ItemComment from "./ItemComment";
 import { Button } from "reactstrap";
 import Rating from "@mui/material/Rating";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const BookDetailPage = () => {
+  const toastObject = {
+    position: "top-right",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+  };
   const token = localStorage.getItem("token");
   const rolesString = localStorage.getItem("roles");
   const userRoles = rolesString ? JSON.parse(rolesString) : [];
@@ -22,11 +34,13 @@ const BookDetailPage = () => {
 
   const [book, setBook] = useState({});
   const [comment, setComment] = useState("");
-  const [comments,setComments] = useState([]);
+  const [comments, setComments] = useState([]);
   const { bookId } = useParams();
   const navigate = useNavigate();
+  const [render, setRender] = useState(false);
+  const [quantity,setQuantity] = useState(0);
 
-  useEffect(async () => {
+  useEffect(() => {
     axios
       .get(`http://localhost:8082/api/book/${bookId}`, {
         headers: {
@@ -40,19 +54,27 @@ const BookDetailPage = () => {
       .catch((error) => {
         console.log(error);
       });
-   const res = await axios.get(`http://localhost:8082/api/comment/get/${bookId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    setComments(res.data);
-    console.log(res.data);
-  }, [bookId]);
+      // Api get commet
+    const apiGetComment = async () => {
+      const res = await axios.get(
+        `http://localhost:8082/api/comment/get/${bookId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setComments(res.data);
+    };
+    apiGetComment();
+  }, [bookId, render]);
+
+  // Hủy comment
   const handleCancelComment = () => {
     setComment("");
     setStar(0);
   };
-
+  // Hủy comment
   const handleDelete = () => {
     if (window.confirm("Bạn chắc chắn muốn xóa không?")) {
       axios
@@ -70,27 +92,95 @@ const BookDetailPage = () => {
         });
     }
   };
+  // Submit Comment
   const handleComment = () => {
-    const response = axios.post(
-      `http://localhost:8082/api/comment/add/${bookId}`,
-      {
-        comment: comment,
-        star: star,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
+    axios
+      .post(
+        `http://localhost:8082/api/comment/add/${bookId}`,
+        {
+          comment: comment,
+          star: star,
         },
-      }
-    );
-    console.log(comments);
-    setComment("");
-    setStar("");
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response) => {
+        if(response.data === "Truemess") {
+          toast.success("Comment thanh cong!!", toastObject);
+          // Đảo ngược giá trị của render để kích hoạt render lại
+          setComment("");
+          setStar(0);
+          setRender(!render);
+        }
+        else if(response.data === "falseStar") toast.error("Vui lòng đánh giá sao!!",toastObject);
+        else toast.error("Vui lòng commet nội dung!!",toastObject);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
+  // Thêm vào giỏ hàng
+  const handleOrderBook = () =>{
+    axios
+      .post(
+        `http://localhost:8082/api/buybook/addbuy/${bookId}`,
+        {
+          quantity:quantity,
+          status:0,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response) => {
+        if(response.data === "trueBuy"){
+          toast.success("Bạn đã thêm sách vào giỏ thành công.",toastObject);
+          setQuantity(0);
+        } 
+        else if(response.data === "falseQuantity") toast.error("Vui lòng chọn số lượng trước khi thêm vào giỏ hàng!",toastObject);
+        else toast.error("Loi",toastObject);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+  // Mua sách
+  const handleBuyBook = ()=>{
+    axios
+      .post(
+        `http://localhost:8082/api/buybook/addbuy/${bookId}`,
+        {
+          quantity:quantity,
+          status:1,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response) => {
+        if(response.data === "trueBuy"){
+          toast.success("Bạn đã mua sách thành công.",toastObject);
+          setQuantity(0);
+        } 
+        else if(response.data === "falseQuantity") toast.error("Vui lòng chọn số lượng trước khi mua!",toastObject);
+        else toast.error("Loi",toastObject);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   return (
     <div>
       <Header></Header>
+      <ToastContainer />
       <div className="container my-2">
         <div className="row">
           <div className="col-md-3">
@@ -99,7 +189,6 @@ const BookDetailPage = () => {
               // class ="img"
               src={`http://localhost:8082/${book.bookImage}`}
               alt={book.bookTitle}
-              // class="img-fluid img-thumbnail"
             />
           </div>
           <div className="col-md-9">
@@ -131,18 +220,22 @@ const BookDetailPage = () => {
                   padding: "3px 0px 7px 10px",
                   marginTop: "2px",
                 }}
+                onChange={(e)=>{
+                  setQuantity(e.target.value)
+                }}
                 type="number"
                 id="quantity"
                 defaultValue={0}
+                value={quantity}
                 name="quantity"
                 min="1"
                 max="100"
                 className="me-2 border border-success rounded"
               />
-              <Button color="danger" className="me-2">
+              <Button onClick={handleOrderBook} color="danger" className="me-2">
                 Thêm vào giỏ hàng
               </Button>
-              <Button color="success">Mua ngay</Button>
+              <Button onClick={handleBuyBook} color="success">Mua ngay</Button>
             </div>
           </div>
           <div className="mt-4">
@@ -189,11 +282,9 @@ const BookDetailPage = () => {
             </button>
           </div>
         </div>
-        {
-                comments.map((item, index)=>(
-                    <ItemComment key={index} item={item} />
-                ))
-            }
+        {comments.map((item, index) => (
+          <ItemComment key={index} item={item} />
+        ))}
         <div className="d-flex justify-content-end bottom-0 end-0 me-5 mb-5">
           {checkRole(userRoles) && (
             <Link
