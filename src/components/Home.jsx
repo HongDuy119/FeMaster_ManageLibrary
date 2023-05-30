@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Header from "./Header";
+import Footer from "./Footer/Footer";
 
 // import { Base64 } from "js-base64";
 
@@ -71,7 +72,7 @@ const Home = () => {
         />
       </div>
 
-      <div className="container ">
+      <div className="container">
         <h2 className="text-center mb-4">Our Bestselling Books</h2>
         <div className="row row-cols-1 row-cols-md-4 g-4">
           {books.map((book) => (
@@ -104,6 +105,7 @@ const Home = () => {
           ))}
         </div>
       </div>
+      <div className="mt-5 "><Footer></Footer></div>
     </div>
   );
 };

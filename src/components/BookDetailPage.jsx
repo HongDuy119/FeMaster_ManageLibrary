@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import {  useParams } from "react-router-dom";
 import "./App.css";
 import Header from "./Header";
 import ItemComment from "./ItemComment";
@@ -22,21 +21,12 @@ const BookDetailPage = () => {
     theme: "light",
   };
   const token = localStorage.getItem("token");
-  const rolesString = localStorage.getItem("roles");
-  const userRoles = rolesString ? JSON.parse(rolesString) : [];
-  const checkRole = (userRoles) => {
-    if (userRoles.includes("ADMIN")) {
-      return true;
-    }
-    return false;
-  };
   const [star, setStar] = useState(0);
 
   const [book, setBook] = useState({});
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
   const { bookId } = useParams();
-  const navigate = useNavigate();
   const [render, setRender] = useState(false);
   const [quantity,setQuantity] = useState(0);
 
@@ -74,24 +64,7 @@ const BookDetailPage = () => {
     setComment("");
     setStar(0);
   };
-  // Hủy comment
-  const handleDelete = () => {
-    if (window.confirm("Bạn chắc chắn muốn xóa không?")) {
-      axios
-        .delete(`http://localhost:8082/api/book/deleteBook/${bookId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then(() => {
-          navigate("/");
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-  };
+  
   // Submit Comment
   const handleComment = () => {
     axios
@@ -285,30 +258,6 @@ const BookDetailPage = () => {
         {comments.map((item, index) => (
           <ItemComment key={index} item={item} />
         ))}
-        <div className="d-flex justify-content-end bottom-0 end-0 me-5 mb-5">
-          {checkRole(userRoles) && (
-            <Link
-              to={`/books/edit/${book.bookId}`}
-              className="text-dark btn btn-primary rounded"
-            >
-              Edit
-            </Link>
-          )}
-          {checkRole(userRoles) && (
-            <button
-              className="text-dark btn btn-primary rounded"
-              onClick={handleDelete}
-            >
-              Delete
-            </button>
-          )}
-
-          {/* <div className="d-flex justify-content-start position-fixed bottom-0 start-0 me-5 mb-5 ">
-          <Link class="text-dark btn btn-primary rounded btn-success" to="/">
-            Quay lại trang chủ
-          </Link>
-        </div> */}
-        </div>
       </div>
     </div>
   );

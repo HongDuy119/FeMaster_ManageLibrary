@@ -1,10 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { BiCart, BiLogOutCircle } from "react-icons/bi"; // Import the cart icon from a library like react-icons
 import {CgProfile} from "react-icons/cg"
 import { useEffect, useState } from "react";
 
 const Header = () => {
-  // const token = localStorage.getItem("token");
+  const navigate = useNavigate();
   const rolesString = localStorage.getItem("roles");
   const userRoles = rolesString ? JSON.parse(rolesString) : []; 
   const checkRole = (userRoles)=>{
@@ -17,6 +17,8 @@ const Header = () => {
 
   const handleProfileClick = () => {
     setShowOptions(false);
+    navigate("/UserProfile")
+    
     // Thực hiện hành động khi nhấp vào Profile
     // Ví dụ: Hiển thị trang profile
   };
@@ -89,7 +91,7 @@ const Header = () => {
             {
               checkRole(userRoles)&&
               (<li className="nav-item">
-              <Link className="nav-link" to="/contact">
+              <Link className="nav-link" to="/AdminCart">
               <button style={{height:"35px"}} className="text-dark btn btn-outline-info rounded border border-light">Quản đơn hàng</button>
               </Link>
             </li>)

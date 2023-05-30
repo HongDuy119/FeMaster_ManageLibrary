@@ -10,9 +10,11 @@ import EditBook from "./components/Admin/AdminBook/EditBook";
 import ContactSection from "./components/LogicA/DFS/contact";
 import { useState } from "react";
 import NotFound from "./components/ErrorPage/errorpage";
-import AddBook from "./components/AddBook";
+import AddBook from "./components/Admin/AdminBook/AddBook";
 import Cart from "./components/Cart/Cart";
 import AdminBook from "./components/Admin/AdminBook/AdminBook";
+import AdminCart from "./components/Admin/AdminCart/AdminCart";
+import Profile from "./components/User/Profile";
 
 function App() {
   const token = localStorage.getItem("token");
@@ -38,11 +40,13 @@ function App() {
           <Route path="/books/:bookId" element={token ?<BookDetailPage />: <Login setRender={setRender} render={render} />} />
           <Route path="/logic" element={<Logic />}></Route>
           <Route path="/contact" element={<ContactSection />} />
-          <Route path="/addbook" element={<AddBook/>} />
+          <Route path="/AdminAddBook" element={checkRole(userRoles) ?<AddBook/>:<NotFound/>} />
           <Route path="/cart" element={token ?<Cart/>:<Login setRender={setRender} render={render} />} />
-          <Route path="/AdminBook" element={checkRole(userRoles) ?<AdminBook/>:<Login setRender={setRender} render={render} />} />
+          <Route path="/AdminBook" element={checkRole(userRoles) ?<AdminBook/>:<NotFound />} />
+          <Route path="/AdminCart" element={checkRole(userRoles) ?<AdminCart/>:<NotFound />} />
+          <Route path="/UserProfile" element={(token) ?<Profile/>:<NotFound />} />
           <Route
-            path="/books/edit/:bookId"
+            path="/AdminBook/edit/:bookId"
             element={ checkRole(userRoles) ? <EditBook /> :<NotFound/>}
           ></Route>
         </Routes>
