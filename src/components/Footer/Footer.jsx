@@ -2,10 +2,10 @@ import React from 'react';
 
 function Footer() {
     return (
-        <footer className="footer" style={{background:"linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1))"}}>
+        <footer className="footer rounded" style={{background:"linear-gradient(to right, rgba(218, 220, 206, 0.5), rgba(37, 117, 252, 0.3))"}}>
             <div className="container">
-                <div className="row">
-                    <div className="col-md-4 text-light">
+                <div className="row ">
+                    <div className="col-md-4 mt-3">
                         <h3>Thông tin</h3>
                         <ul>
                             <li><a href="/">Về chúng tôi</a></li>
@@ -13,7 +13,7 @@ function Footer() {
                             <li><a href="/">Điều khoản sử dụng</a></li>
                         </ul>
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-4 mt-3">
                         <h3>Hỗ trợ</h3>
                         <ul>
                             <li><a href="/">Hướng dẫn mua hàng</a></li>
@@ -21,11 +21,11 @@ function Footer() {
                             <li><a href="/">Chính sách đổi trả</a></li>
                         </ul>
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-4 mt-3">
                         <h3>Liên hệ</h3>
-                        <p>123 Đường ABC, Quận XYZ, TP ABC</p>
-                        <p>Email: info@example.com</p>
-                        <p>Điện thoại: 123-456-7890</p>
+                        <p>Hà Đông, Hà Nội</p>
+                        <p>Email: duy1192002@gmail.com</p>
+                        <p>Điện thoại: 0367382925</p>
                     </div>
                 </div>
                 <div className="row">

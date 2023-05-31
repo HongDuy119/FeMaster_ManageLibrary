@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {  useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import "./App.css";
 import Header from "./Header";
 import ItemComment from "./ItemComment";
@@ -28,7 +28,7 @@ const BookDetailPage = () => {
   const [comments, setComments] = useState([]);
   const { bookId } = useParams();
   const [render, setRender] = useState(false);
-  const [quantity,setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(0);
 
   useEffect(() => {
     axios
@@ -44,7 +44,7 @@ const BookDetailPage = () => {
       .catch((error) => {
         console.log(error);
       });
-      // Api get commet
+    // Api get commet
     const apiGetComment = async () => {
       const res = await axios.get(
         `http://localhost:8082/api/comment/get/${bookId}`,
@@ -64,7 +64,7 @@ const BookDetailPage = () => {
     setComment("");
     setStar(0);
   };
-  
+
   // Submit Comment
   const handleComment = () => {
     axios
@@ -81,28 +81,28 @@ const BookDetailPage = () => {
         }
       )
       .then((response) => {
-        if(response.data === "Truemess") {
+        if (response.data === "Truemess") {
           toast.success("Comment thanh cong!!", toastObject);
           // Đảo ngược giá trị của render để kích hoạt render lại
           setComment("");
           setStar(0);
           setRender(!render);
-        }
-        else if(response.data === "falseStar") toast.error("Vui lòng đánh giá sao!!",toastObject);
-        else toast.error("Vui lòng commet nội dung!!",toastObject);
+        } else if (response.data === "falseStar")
+          toast.error("Vui lòng đánh giá sao!!", toastObject);
+        else toast.error("Vui lòng commet nội dung!!", toastObject);
       })
       .catch((error) => {
         console.log(error);
       });
   };
   // Thêm vào giỏ hàng
-  const handleOrderBook = () =>{
+  const handleOrderBook = () => {
     axios
       .post(
         `http://localhost:8082/api/buybook/addbuy/${bookId}`,
         {
-          quantity:quantity,
-          status:0,
+          quantity: quantity,
+          status: 0,
         },
         {
           headers: {
@@ -111,44 +111,49 @@ const BookDetailPage = () => {
         }
       )
       .then((response) => {
-        if(response.data === "trueBuy"){
-          toast.success("Bạn đã thêm sách vào giỏ thành công.",toastObject);
+        if (response.data === "trueBuy") {
+          toast.success("Bạn đã thêm sách vào giỏ thành công.", toastObject);
           setQuantity(0);
-        } 
-        else if(response.data === "falseQuantity") toast.error("Vui lòng chọn số lượng trước khi thêm vào giỏ hàng!",toastObject);
-        else toast.error("Loi",toastObject);
+        } else if (response.data === "falseQuantity")
+          toast.error(
+            "Vui lòng chọn số lượng trước khi thêm vào giỏ hàng!",
+            toastObject
+          );
+        else toast.error("Loi", toastObject);
       })
       .catch((error) => {
         console.log(error);
       });
-  }
+  };
   // Mua sách
-  const handleBuyBook = ()=>{
-    axios
-      .post(
-        `http://localhost:8082/api/buybook/addbuy/${bookId}`,
-        {
-          quantity:quantity,
-          status:1,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
+  const handleBuyBook = () => {
+    if (window.confirm("Xác nhận mua sách")) {
+      axios
+        .post(
+          `http://localhost:8082/api/buybook/addbuy/${bookId}`,
+          {
+            quantity: quantity,
+            status: 1,
           },
-        }
-      )
-      .then((response) => {
-        if(response.data === "trueBuy"){
-          toast.success("Bạn đã mua sách thành công.",toastObject);
-          setQuantity(0);
-        } 
-        else if(response.data === "falseQuantity") toast.error("Vui lòng chọn số lượng trước khi mua!",toastObject);
-        else toast.error("Loi",toastObject);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((response) => {
+          if (response.data === "trueBuy") {
+            toast.success("Bạn đã mua sách thành công.", toastObject);
+            setQuantity(0);
+          } else if (response.data === "falseQuantity")
+            toast.error("Vui lòng chọn số lượng trước khi mua!", toastObject);
+          else toast.error("Loi", toastObject);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
 
   return (
     <div>
@@ -193,8 +198,8 @@ const BookDetailPage = () => {
                   padding: "3px 0px 7px 10px",
                   marginTop: "2px",
                 }}
-                onChange={(e)=>{
-                  setQuantity(e.target.value)
+                onChange={(e) => {
+                  setQuantity(e.target.value);
                 }}
                 type="number"
                 id="quantity"
@@ -208,7 +213,9 @@ const BookDetailPage = () => {
               <Button onClick={handleOrderBook} color="danger" className="me-2">
                 Thêm vào giỏ hàng
               </Button>
-              <Button onClick={handleBuyBook} color="success">Mua ngay</Button>
+              <Button onClick={handleBuyBook} color="success">
+                Mua ngay
+              </Button>
             </div>
           </div>
           <div className="mt-4">

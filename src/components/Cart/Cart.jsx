@@ -3,10 +3,22 @@ import axios from "axios";
 // import Modal from "react-modal";
 import Header from "../Header";
 import "../App.css";
+import { toast } from "react-toastify";
 
 function Cart() {
+  const toastObject = {
+    position: "top-right",
+    autoClose: 1000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+  };
   const token = localStorage.getItem("token");
   const [carts, setCarts] = useState([]);
+  const [render, setRender] = useState(false);
   useEffect(() => {
     axios
       .get(`http://localhost:8082/api/buybook/get`, {
@@ -21,7 +33,52 @@ function Cart() {
       .catch((errr) => {
         console.log(errr);
       });
-  }, []);
+  }, [render]);
+  // Xoa đơn chưa đặt
+  const handleDelete = (id) => {
+    if (window.confirm("Bạn muốn xóa không?")) {
+      axios
+        .delete(
+          `http://localhost:8082/api/buybook/delete`,
+          { id: id },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        )
+        .then((response) => {
+          setRender(!render);
+        })
+        .catch((errr) => {
+          console.log(errr);
+        });
+    }
+  };
+  // Xác nhận đặt đơn
+  const hadleConfirmOrder = (id) => {
+    if (window.confirm("Xác nhận đặt hàng")) {
+      axios
+        .put(
+          `http://localhost:8082/api/buybook/editStatus/${id}`,
+          { status: 1 },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        )
+        .then((response) => {
+          toast.success("Xác nhận thành công", toastObject);
+          setRender(!render);
+        })
+        .catch((errr) => {
+          console.log(errr);
+        });
+    }
+  };
 
   return (
     <div>
@@ -96,10 +153,16 @@ function Cart() {
                   <td>
                     {cart.status === 0 ? (
                       <div>
-                        <button className="btn btn-danger border-bottom me-2">
+                        <button
+                          className="btn btn-danger border-bottom me-2"
+                          onClick={() => handleDelete(cart.id)}
+                        >
                           Xóa
                         </button>
-                        <button className="btn btn-success border-bottom">
+                        <button
+                          onClick={() => hadleConfirmOrder(cart.id)}
+                          className="btn btn-success border-bottom"
+                        >
                           Đặt hàng
                         </button>
                       </div>

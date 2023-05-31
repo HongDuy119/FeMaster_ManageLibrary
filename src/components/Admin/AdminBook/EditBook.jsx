@@ -17,6 +17,8 @@ const EditBook = () => {
   const [image, setImage] = useState(null);
   const { register, handleSubmit, setValue } = useForm();
   const [currentImage, setCurrentImage] = useState(null); // biến tạm lưu trữ ảnh hiện tại
+  const [errorPrice, seterrorPrice] = useState("");
+  const [errorNumberpage, seterrorNumberpage] = useState("");
   const toastObject = {
     position: "top-right",
     autoClose: 1000,
@@ -174,8 +176,17 @@ const EditBook = () => {
                   className="form-control"
                   id="bookNumberPage"
                   {...register("bookNumberPage")}
+                  onChange={(e) => {
+                    seterrorNumberpage("");
+                    if (
+                      parseInt(e.target.value) % 1 !== 0 ||
+                      isNaN(e.target.value)
+                    )
+                      seterrorNumberpage("Vui lòng nhập số nguyên!!");
+                  }}
                   required
                 />
+                <div class="login__error">{errorNumberpage}</div>
               </div>
             </div>
             <div className="row mt-2">
@@ -196,8 +207,14 @@ const EditBook = () => {
                   className="form-control"
                   id="price"
                   required
+                  onChange={(e) => {
+                    seterrorPrice("");
+                    if (isNaN(e.target.value))
+                      seterrorPrice("Vui lòng nhập số!!");
+                  }}
                   {...register("price")}
                 />
+                <div class="login__error">{errorPrice}</div>
               </div>
             </div>
           </div>

@@ -1,8 +1,10 @@
+import { useTheme } from '@emotion/react';
+import { useState } from 'react';
 import { AiTwotoneStar } from 'react-icons/ai'
 
 const ItemComment = (props) => {
     const {item} = props
-
+   
     const createArray = (length) => {
         var arr = []
         for (let i = 1; i <= length; i++) {
@@ -15,7 +17,7 @@ const ItemComment = (props) => {
         <div className='d-flex py-3 border-top border-bottom'>
             <div className='me-2'>
                 <div style={{ width: '40px' }}>
-                    <img src="https://img6.thuthuatphanmem.vn/uploads/2022/11/18/anh-avatar-don-gian-ma-dep_081757969.jpg" className='w-100 rounded-circle' alt="" />
+                    <img src={item.user.avatar?`http://localhost:8082/${item.user.avatar}`:"https://img6.thuthuatphanmem.vn/uploads/2022/11/18/anh-avatar-don-gian-ma-dep_081757969.jpg"} className='w-100 rounded-circle' alt="" />
                 </div>
             </div>
             <div className="d-flex flex-column flex-fill px-2 ">

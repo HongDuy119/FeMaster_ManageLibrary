@@ -129,9 +129,9 @@ function Login(props) {
               />
               <div className="login__error">{error.result}</div>
               <p className="small mb-3 pb-lg-2">
-                <a class="text-white-50" href="#!">
+                {/* <a class="text-white-50" href="#!">
                   Forgot password?
-                </a>
+                </a> */}
               </p>
               <Button
                 outline

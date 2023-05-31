@@ -3,8 +3,19 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../../App.css";
 import Header from "../../Header";
+import { ToastContainer, toast } from "react-toastify";
 
 const AddBook = () => {
+  const toastObject = {
+    position: "top-right",
+    autoClose: 1000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+  };
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const [bookTitle, setBookTitle] = useState("");
@@ -73,7 +84,15 @@ const AddBook = () => {
 
     // Perform the necessary actions with the formData
     // For example, you can send it to the server using Fetch API or axios
-    if (window.confirm("Bạn muốn thêm sách không?")) {
+    if(errorNumberpage)
+    {
+      toast.error("Vui lòng nhập đúng định dạng trang",toastObject);
+    }
+    else if(errorPrice)
+    {
+      toast.error("Vui lòng nhập đúng định dạng giá",toastObject);
+    }
+    else if (window.confirm("Bạn muốn thêm sách không?")) {
       axios
         .post(`http://localhost:8082/api/book/addBook`, formData, {
           headers: {
@@ -87,6 +106,7 @@ const AddBook = () => {
         })
         .catch((error) => {
           console.log(error);
+          toast.error("Kiểm tra lại thông tin!",toastObject);
         });
     }
 
@@ -102,6 +122,7 @@ const AddBook = () => {
   return (
     <div>
       <Header></Header>
+      <ToastContainer></ToastContainer>
       <form onSubmit={handleSubmit}>
       <h2 className="text-center text-primary m-3">Chào mừng bạn đến với trang thêm sách 🥰</h2>
         <div className="row m-3 container">
@@ -196,6 +217,7 @@ const AddBook = () => {
                 id="image"
                 name="Upload"
                 accept="image/*"
+                required
                 onChange={handleImageChange}
               />
             </div>

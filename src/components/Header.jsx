@@ -2,17 +2,40 @@ import { Link, useNavigate } from "react-router-dom";
 import { BiCart, BiLogOutCircle } from "react-icons/bi"; // Import the cart icon from a library like react-icons
 import {CgProfile} from "react-icons/cg"
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Header = () => {
+  const [render,setRender] = useState(false);
   const navigate = useNavigate();
   const rolesString = localStorage.getItem("roles");
+  const token = localStorage.getItem("token");
   const userRoles = rolesString ? JSON.parse(rolesString) : []; 
+  const [user,setUser] = useState("");
   const checkRole = (userRoles)=>{
     if( userRoles.includes("ADMIN")){
       return true
     }
     return false
   }
+  useEffect(() => {
+    if(!render)
+    {
+      axios
+      .get(`http://localhost:8082/api/auth/getUser`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        setUser(response.data);
+        setRender(true)
+      })
+      .catch((errr) => {
+        console.log(errr);
+      });
+    }
+  }, [render]);
   const [showOptions, setShowOptions] = useState(false);
 
   const handleProfileClick = () => {
@@ -55,7 +78,7 @@ const Header = () => {
       <div className="container-fluid">
         <Link className="navbar-brand header-link" to="/">
           <img
-            src="https://banner2.cleanpng.com/20190505/tki/kisspng-vector-graphics-book-stock-illustration-logo-research-vector-book-transparent-amp-png-clipart-5cce8c43c04ea6.1155603815570401957877.jpg"
+            src={"https://banner2.cleanpng.com/20190505/tki/kisspng-vector-graphics-book-stock-illustration-logo-research-vector-book-transparent-amp-png-clipart-5cce8c43c04ea6.1155603815570401957877.jpg"}
             style={{ width: 100, height: 40 }}
             alt="Logo"
             className="logo-image me-3"
@@ -114,7 +137,7 @@ const Header = () => {
               <div className="user-profile mt-1" style={{ width: "30px" }}>
                 <img
                   className="w-100 border rounded-circle ms-2"
-                  src="https://cdn-icons-png.flaticon.com/512/1946/1946429.png"
+                  src={user.avatar?`http://localhost:8082/${user.avatar}`:"https://cdn-icons-png.flaticon.com/512/1946/1946429.png"}
                   alt="User Image"
                   onClick={() => setShowOptions(!showOptions)}
                 />

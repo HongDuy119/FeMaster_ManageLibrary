@@ -24,25 +24,22 @@ function AdminCart() {
         console.log(errr);
       });
   }, [render]);
-  // Xoa sach
-  // const handleDelete = (bookId) => {
-  //   if (window.confirm("Bạn chắc chắn muốn xóa không?")) {
-  //     axios
-  //       .delete(`http://localhost:8082/api/book/deleteBook/${bookId}`, {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //           "Content-Type": "multipart/form-data",
-  //         },
-  //       })
-  //       .then((response) => {
-  //         setRender(!render);
-  //         // console.log(response);
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //       });
-  //   }
-  // };
+  const handleSearchOptionChange = (e,id)=>{
+    axios
+      .put(`http://localhost:8082/api/buybook/editStatus/${id}`, 
+      {status:e.target.value},{
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        setRender(!render)
+      })
+      .catch((errr) => {
+        console.log(errr);
+      });
+  }
   return (
     <div>
       <Header></Header>
@@ -123,12 +120,13 @@ function AdminCart() {
                   </td>
                   <td>
                     <select
+                    onChange={(event)=>handleSearchOptionChange(event,cart.id)}
                       class="form-select form-select-sm btn-light border rounded" style={{width:"200px",fontSize:"15px"}}
                       // aria-label=".form-select-lg example"
                     >
-                      <option selected >Đang giao hàng</option>
-                      <option value="1">Giao hàng thành công</option>
-                      <option value="2">Chưa đặt hàng</option>
+                      <option value="1" selected = {cart.status===1} >Đang giao hàng</option>
+                      <option value="2" selected = {cart.status===2}>Giao hàng thành công</option>
+                      <option value="0" selected = {cart.status===0}>Chưa đặt hàng</option>
                     </select>
                   </td>
                 </tr>

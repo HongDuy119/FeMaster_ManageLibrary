@@ -105,7 +105,9 @@ const Home = () => {
           ))}
         </div>
       </div>
-      <div className="mt-5 "><Footer></Footer></div>
+      <div className="mt-3">
+      <Footer></Footer>
+      </div>
     </div>
   );
 };
