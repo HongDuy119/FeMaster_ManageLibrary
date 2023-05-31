@@ -4,7 +4,7 @@ import axios from "axios";
 import Header from "../../Header";
 import { Link } from "react-router-dom";
 import "../../App.css";
-import { ToastContainer, toast } from "react-toastify";
+
 import "react-toastify/dist/ReactToastify.css";
 
 function AdminBook() {
@@ -57,7 +57,7 @@ function AdminBook() {
         <div>
           <Link
             style={{ fontSize: "20px" }}
-            to={`/AdminAddBook`}
+            to={`/AdminBook/edit/-1`}
             className="text-light btn btn-success border-bottom rounded me-2"
           >
             Thêm sách

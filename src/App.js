@@ -15,6 +15,7 @@ import Cart from "./components/Cart/Cart";
 import AdminBook from "./components/Admin/AdminBook/AdminBook";
 import AdminCart from "./components/Admin/AdminCart/AdminCart";
 import Profile from "./components/User/Profile";
+import AdminUser from "./components/Admin/AdminUser/AdminUser";
 
 function App() {
   const token = localStorage.getItem("token");
@@ -40,10 +41,11 @@ function App() {
           <Route path="/books/:bookId" element={token ?<BookDetailPage />: <Login setRender={setRender} render={render} />} />
           <Route path="/logic" element={<Logic />}></Route>
           <Route path="/contact" element={<ContactSection />} />
-          <Route path="/AdminAddBook" element={checkRole(userRoles) ?<AddBook/>:<NotFound/>} />
+          <Route path="/AdminBook/edit/-1" element={checkRole(userRoles) ?<AddBook/>:<NotFound/>} />
           <Route path="/cart" element={token ?<Cart/>:<Login setRender={setRender} render={render} />} />
           <Route path="/AdminBook" element={checkRole(userRoles) ?<AdminBook/>:<NotFound />} />
           <Route path="/AdminCart" element={checkRole(userRoles) ?<AdminCart/>:<NotFound />} />
+          <Route path="/AdminUser" element={checkRole(userRoles) ?<AdminUser/>:<NotFound />} />
           <Route path="/UserProfile" element={(token) ?<Profile/>:<NotFound />} />
           <Route
             path="/AdminBook/edit/:bookId"

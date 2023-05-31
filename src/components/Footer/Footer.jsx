@@ -30,7 +30,7 @@ function Footer() {
                 </div>
                 <div className="row">
                     <div className="col-md-12">
-                        <p className="text-center">© 2023 Tên Công ty. Tất cả các quyền được bảo lưu.</p>
+                        <p className="text-center">© 2023 by HongDuy. Tất cả các quyền được bảo lưu.</p>
                     </div>
                 </div>
             </div>

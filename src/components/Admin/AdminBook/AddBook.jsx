@@ -102,7 +102,17 @@ const AddBook = () => {
         })
         .then((response) => {
           //   console.log(response.data);
-          navigate("/AdminBook");
+          if(response.data === "FalseAdd")
+          {
+            toast.error("Sách đã tồn tại",toastObject);
+          }
+          else
+          { 
+              toast.success("Thêm sách thành công",toastObject);
+              setTimeout(() => {
+                navigate("/AdminBook");
+              }, 1000);
+          }
         })
         .catch((error) => {
           console.log(error);

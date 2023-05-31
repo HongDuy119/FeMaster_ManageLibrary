@@ -39,8 +39,7 @@ function Cart() {
     if (window.confirm("Bạn muốn xóa không?")) {
       axios
         .delete(
-          `http://localhost:8082/api/buybook/delete`,
-          { id: id },
+          `http://localhost:8082/api/buybook/delete/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

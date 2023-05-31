@@ -115,7 +115,15 @@ const Header = () => {
               checkRole(userRoles)&&
               (<li className="nav-item">
               <Link className="nav-link" to="/AdminCart">
-              <button style={{height:"35px"}} className="text-dark btn btn-outline-info rounded border border-light">Quản đơn hàng</button>
+              <button style={{height:"35px"}} className="text-dark btn btn-outline-info rounded border border-light">Quản lý đơn hàng</button>
+              </Link>
+            </li>)
+            }
+            {
+              checkRole(userRoles)&&
+              (<li className="nav-item">
+              <Link className="nav-link" to="/AdminUser">
+              <button style={{height:"35px"}} className="text-dark btn btn-outline-info rounded border border-light">Quản lý người dùng</button>
               </Link>
             </li>)
             }

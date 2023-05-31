@@ -64,7 +64,7 @@ const Profile = () => {
     );
     if (window.confirm("Bạn muốn cập nhập thông tin?")) {
       const emailPattern = /^[a-zA-Z0-9._+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-      if(phone.length !== 10 || isNaN(phone))
+      if(!phone || phone.length !== 10 || isNaN(phone?phone:""))
       {
           toast.error("Số điện thoại nhập chưa hợp lệ",toastObject);
       }
@@ -210,7 +210,9 @@ const Profile = () => {
           <button onClick={handleChangeAvatar} type="submit" className="btn btn-primary rounded-circle">
             Change avatar
           </button>
-          {open && <input required onChange={(e)=>{setImage(e.target.files[0])}} type="file"></input>}
+          {open && <input required onChange={(e)=>{setImage(e.target.files[0]);
+          setAvatarview(URL.createObjectURL(e.target.files[0]))
+          }} type="file"></input>}
         </div>
     </div>
   );

@@ -19,6 +19,7 @@ const EditBook = () => {
   const [currentImage, setCurrentImage] = useState(null); // biến tạm lưu trữ ảnh hiện tại
   const [errorPrice, seterrorPrice] = useState("");
   const [errorNumberpage, seterrorNumberpage] = useState("");
+  const [edit, setEdit] = useState(true);
   const toastObject = {
     position: "top-right",
     autoClose: 1000,
@@ -83,35 +84,39 @@ const EditBook = () => {
       formData.append("images", image);
       console.log(image);
     }
-    axios
-      .put(`http://localhost:8082/api/book/editBook/${bookId}`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((response) => {
-        if (response.data === "ok") {
-          // alert("oce")
-          toast.success("Cập nhập sách thành công!", toastObject);
+    if (window.confirm("Xác nhận cập nhập sách")) {
+      axios
+        .put(`http://localhost:8082/api/book/editBook/${bookId}`, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((response) => {
+          if (response.data === "ok") {
+            // alert("oce")
+            toast.success("Cập nhập sách thành công!", toastObject);
 
-          setTimeout(() => {
-            navigate(`/AdminBook`);
-          }, 2000);
-        } else {
-          toast.warn(" Kiểm tra lại thông tin!", toastObject);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error("Thông tin chưa hợp lệ", toastObject);
-      });
+            setTimeout(() => {
+              navigate(`/AdminBook`);
+            }, 2000);
+          } else {
+            toast.warn(" Kiểm tra lại thông tin!", toastObject);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.error("Thông tin chưa hợp lệ", toastObject);
+        });
+    }
   };
 
   const handleImageChange = (event) => {
     setImage(event.target.files[0]);
   };
-
+  const handleChangeEdit = () => {
+    setEdit(false);
+  };
   return (
     <div>
       <Header></Header>
@@ -131,6 +136,7 @@ const EditBook = () => {
                   className="form-control"
                   id="bookTitle"
                   required
+                  disabled={edit}
                   {...register("bookTitle")}
                 />
               </div>
@@ -142,6 +148,7 @@ const EditBook = () => {
                   id="bookAuthor"
                   {...register("bookAuthor")}
                   required
+                  disabled={edit}
                 />
               </div>
             </div>
@@ -155,6 +162,7 @@ const EditBook = () => {
                 id="bookDescription"
                 {...register("bookDescription")}
                 required
+                disabled={edit}
               />
             </div>
             <div className="row mt-2">
@@ -167,6 +175,7 @@ const EditBook = () => {
                   // value={book.bookDate?.substr(0,10)}
                   {...register("date")}
                   required
+                  disabled={edit}
                 />
               </div>
               <div className="form-group col-md-6">
@@ -185,6 +194,7 @@ const EditBook = () => {
                       seterrorNumberpage("Vui lòng nhập số nguyên!!");
                   }}
                   required
+                  disabled={edit}
                 />
                 <div class="login__error">{errorNumberpage}</div>
               </div>
@@ -198,6 +208,7 @@ const EditBook = () => {
                   id="bookCategory"
                   {...register("bookCategory")}
                   required
+                  disabled={edit}
                 />
               </div>
               <div className="form-group col-md-6">
@@ -207,6 +218,7 @@ const EditBook = () => {
                   className="form-control"
                   id="price"
                   required
+                  disabled={edit}
                   onChange={(e) => {
                     seterrorPrice("");
                     if (isNaN(e.target.value))
@@ -227,6 +239,7 @@ const EditBook = () => {
                 id="image"
                 name="Upload"
                 accept="image/*"
+                disabled={edit}
                 onChange={handleImageChange}
               />
             </div>
@@ -249,12 +262,18 @@ const EditBook = () => {
             </div>
           </div>
         </div>
-        <div className="col col-md-2">
+        <div className="col col-md-2 container mt-5">
           <button type="submit" className="btn btn-primary">
             Save Changes
           </button>
+          <div></div>
         </div>
       </form>
+      <div className="col col-md-2 container mt-2">
+        <button onClick={handleChangeEdit} className="btn btn-warning ms-4">
+          Edit
+        </button>
+      </div>
     </div>
   );
 };
