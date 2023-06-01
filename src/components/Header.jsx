@@ -83,7 +83,7 @@ const Header = () => {
             alt="Logo"
             className="logo-image me-3"
           />
-          {!checkRole(userRoles)?"My Website":"Hệ thống quản lý thư viện"}
+          {!checkRole(userRoles)?"Thư viện online":"Hệ thống quản lý thư viện"}
         </Link>
         <button
           className="navbar-toggler"

@@ -53,7 +53,7 @@ const Home = () => {
         <select
           name="search"
           id="search"
-          className="ms-2 border border-dark rounded"
+          class="form-select form-select-sm btn-light border rounded mt-2 ms-2" style={{width:"100px",fontSize:"15px"}}
           value={searchOption}
           onChange={handleSearchOptionChange}
         >
@@ -64,7 +64,7 @@ const Home = () => {
         </select>
         <input
           style={{ marginLeft: "10px" }}
-          className="rounded"
+          className="rounded mt-2"
           id="title"
           type="text"
           onChange={onchange}

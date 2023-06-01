@@ -239,7 +239,6 @@ const EditBook = () => {
                 id="image"
                 name="Upload"
                 accept="image/*"
-                disabled={edit}
                 onChange={handleImageChange}
               />
             </div>
@@ -262,15 +261,15 @@ const EditBook = () => {
             </div>
           </div>
         </div>
-        <div className="col col-md-2 container mt-5">
-          <button type="submit" className="btn btn-primary">
-            Save Changes
+        <div disabled className="col col-md-2 container mt-5">
+          <button disabled={edit} type="submit" className="btn btn-primary">
+            Cập nhật
           </button>
           <div></div>
         </div>
       </form>
       <div className="col col-md-2 container mt-2">
-        <button onClick={handleChangeEdit} className="btn btn-warning ms-4">
+        <button onClick={handleChangeEdit} className="btn btn-warning ms-3">
           Edit
         </button>
       </div>

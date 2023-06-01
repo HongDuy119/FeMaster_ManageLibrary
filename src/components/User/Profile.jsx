@@ -87,6 +87,7 @@ const Profile = () => {
         })
         .catch((error) => {
           console.log(error);
+          toast.error("Email đã tồn tại",toastObject);
         });
     }
   }

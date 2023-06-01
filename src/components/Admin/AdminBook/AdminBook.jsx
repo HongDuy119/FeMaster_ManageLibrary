@@ -11,7 +11,6 @@ function AdminBook() {
   const token = localStorage.getItem("token");
   const [books, setBooks] = useState([]);
   const [render, setRender] = useState(false);
-
   useEffect(() => {
     axios
       .get(`http://localhost:8082/api/book/getAllbyAdmin`, {
@@ -47,6 +46,24 @@ function AdminBook() {
         });
     }
   };
+  // search tên sách
+  const handleSearch = (event) =>{
+    if (event.target.value !== "") {
+      const option = "title";
+      axios
+        .get(
+          // console.log(searchOption)
+          `http://localhost:8082/api/book/getbytitle?s=${event.target.value.trim()}&s1=${option}`
+        )
+        .then((response) => {
+          setBooks(response.data);
+        });
+    } else {
+      axios.get(`http://localhost:8082/api/book/getAll`).then((response) => {
+        setBooks(response.data);
+      });
+    }
+  }
   return (
     <div>
       <Header></Header>
@@ -55,10 +72,11 @@ function AdminBook() {
           Chào mừng bạn đến với trang quản lý sách 🥰
         </h2>
         <div>
+          <input className="rounded me-2" style={{ fontSize: "20px" }} type="text" onChange={handleSearch} placeholder="Tìm kiếm tên sách" />
           <Link
-            style={{ fontSize: "20px" }}
+            style={{ fontSize: "15px" }}
             to={`/AdminBook/edit/-1`}
-            className="text-light btn btn-success border-bottom rounded me-2"
+            className="text-light btn btn-success border-bottom rounded me-2 mb-2"
           >
             Thêm sách
           </Link>
